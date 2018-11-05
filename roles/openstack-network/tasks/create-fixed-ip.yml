@@ -1,0 +1,52 @@
+---
+# Role - openstack-network - tasks- create-fixed-ip.yml
+- name: Create fixed ips
+  os_port:
+    state: present
+    name: "{{ item.name }}"
+    network: "{{ networkname }}"
+    fixed_ips:
+      - ip_address: "{{ item.ip }}"
+    security_groups: "{{ item.sg }}"
+  register: ip
+  with_items: "{{ fixed_ip }}"
+
+- name: Create virtual port for LB
+  os_port:
+    state: present
+    name: "VIP"
+    network: "{{networkname}}"
+    fixed_ips:
+      - ip_address: "{{ lb_vip }}"
+    security_groups: "vrrp-sec-grp"
+  register: vip
+
+- name: "Set vip port to Loadbalancer Public IP: {{ lb_public }}"
+  ignore_errors: yes
+  hosts: localhost
+  command: "openstack floating ip set --port {{ vip.port.id }} {{ lb_public }}"
+  register: floating_ip
+
+- name: "Set monitor fixed ip to Monitor Public IP: {{ mon_public }}"
+  ignore_errors: yes
+  hosts: localhost
+  command: "openstack floating ip set --port monitor {{ mon_public }}"
+
+- name: "Set jumpserver fixed ip to Jumpserver Public IP: {{ js_public }}"
+  ignore_errors: yes
+  hosts: localhost
+  command: "openstack floating ip set --port jumpserver {{ js_public }}"
+
+- name: "Update lb1 port with allowed address VIP"
+  ignore_errors: yes
+  command: "openstack port set --enable --allowed-address ip-address={{ lb_vip }} {{ item.port.id }}"
+  with_items: "{{ ip.results }}"
+  when:
+  - item.port.name == 'lb1'
+
+- name: "Update lb2 port with allowed address VIP"
+  ignore_errors: yes
+  command: "openstack port set --enable --allowed-address ip-address={{ lb_vip }} {{ item.port.id }}"
+  with_items: "{{ ip.results }}"
+  when:
+  - item.port.name == 'lb2'

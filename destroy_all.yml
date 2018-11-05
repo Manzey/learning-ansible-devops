@@ -1,0 +1,7 @@
+---
+- name: Destroy everything
+  hosts: localhost
+  remote_user: root
+
+- import_playbook: destroy_instances.yml
+- import_playbook: destroy_network.yml

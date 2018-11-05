@@ -1,0 +1,6 @@
+---
+# Role - apache - handlers - main.yml
+- name: wp running
+  service:
+    name: wordpress
+    state: started

@@ -1,0 +1,8 @@
+---
+sensu_remote_plugins:
+  - cpu-checks
+  - disk-checks
+  - memory-checks
+  - process-checks
+
+sensu_config_path_checks: "{{ dynamic_data_store }}/sensu/client_definitions/backup/"

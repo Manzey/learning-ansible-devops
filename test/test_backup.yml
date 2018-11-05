@@ -1,0 +1,17 @@
+- name: Test backup
+  hosts: backup
+  become: yes
+  gather_facts: false
+  tags:
+    - backup
+
+  tasks:
+    - name: backup_test_reachability
+      ping:
+
+    - name: backup_test_sshfile_is_present
+      become: yes
+      stat:
+        path: /home/ubuntu/.ssh/id_rsa.pem
+      register: p
+      failed_when: p.stat.exists == False

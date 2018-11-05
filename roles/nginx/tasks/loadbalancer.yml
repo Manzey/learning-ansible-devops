@@ -1,0 +1,5 @@
+---
+# Role - nginx - tasks- loadbalancer.yml    
+- name: Copy file to /etc/nginx/sites-enabled/default
+  template: src=default.j2 dest=/etc/nginx/sites-enabled/default
+  notify: restart nginx

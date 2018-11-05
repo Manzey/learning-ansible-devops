@@ -1,0 +1,118 @@
+---
+# Globals
+ubuntu_image: "ae802a6e-89d0-4a6c-978a-5004ece6cf73" # Ubuntu 16.04
+ubuntu_image_1804: "dec4c641-2949-4857-b31f-822a1567e233" # Ubuntu 18.04
+keyname: "grupp3"
+key_location: "~/.ssh/grupp3.pem"
+ansible_python_interpreter: /usr/bin/python3
+sensu_ssl_gen_certs: false
+sensu_ssl_manage_certs: false
+uchiwa_port: 3001
+sensu_api_port: 4567
+redis_port: 6379
+grafana_ext_port: 3000
+rabbitmq_port: 5671
+rabbitmq_host: "{{ mon_fixed_ip }}"
+redis_host: "{{ mon_fixed_ip }}"
+sensu_api_host: "{{ mon_fixed_ip }}"
+sensu_master: false
+rabbitmq_enable_ssl: false
+
+# Network related
+networkname: "ACME_Network"
+subnetName: "ACME_Subnet"
+subnet: "192.168.0.0/24"
+router: "ACME_Router"
+DNS1: "8.8.8.8"
+DNS2: "8.8.4.4"
+gateway: "192.168.0.1"
+# Fixed ips
+fixed_ip:
+  - name: db1
+    ip: "{{ db1_fixed_ip}}"
+    sg: "{{ db_sg }}"
+  - name: fs1
+    ip: "{{ fs1_fixed_ip }}"
+    sg: "{{ fs_sg }}"
+  - name: wp1
+    ip: "{{ wp1_fixed_ip}}"
+    sg: "{{ wp_sg }}"
+  - name: wp2
+    ip: "{{ wp2_fixed_ip}}"
+    sg: "{{ wp_sg }}"
+  - name: wp3
+    ip: "{{ wp3_fixed_ip}}"
+    sg: "{{ wp_sg }}"
+  - name: monitor
+    ip: "{{ mon_fixed_ip }}"
+    sg: "{{ mon_sg }}"
+  - name: jumpserver
+    ip: "{{ js_fixed_ip }}"
+    sg: "{{ js_sg }}"
+  - name: lb1
+    ip: "{{ lb1_fixed_ip }}"
+    sg: "{{ lb_sg }}"
+  - name: lb2
+    ip: "{{ lb2_fixed_ip }}"
+    sg: "{{ lb_sg }}"
+  - name: backup
+    ip: "{{ backup_fixed_ip }}"
+    sg: "{{ backup_sg }}"
+
+# Loadbalancer
+lb_hostname: "ACME_LoadBalancer"
+lb_flavor: "c1-r05-d10"
+lb_sg: "SSHInt,HTTP,vrrp-sec-grp"
+lb_zone: "Education"
+lb_vip: 192.168.0.223
+lb1_fixed_ip: 192.168.0.12
+lb2_fixed_ip: 192.168.0.13
+lb_public: 194.47.206.156
+
+#monitoring
+mon_hostname: "ACME_Monitor"
+mon_flavor: "c1-r4-d20"
+mon_sg: "SSHInt,Monitor"
+mon_zone: "Education"
+mon_fixed_ip: 192.168.0.10
+mon_public: 194.47.206.137
+
+# Jump server
+js_hostname: "ACME_JumpServer"
+js_flavor: "c1-r05-d10"
+js_sg: "SSHExt"
+js_zone: "Education"
+js_fixed_ip: 192.168.0.11
+js_public: 194.47.206.46
+
+#Database
+db_hostname: "ACME_Database"
+db_flavor: "c1-r05-d10"
+db_sg: "SSHInt,MYSQL"
+db_zone: "Education"
+db_databaseName: "ACME_DB"
+db1_fixed_ip: 192.168.0.5
+
+#wordpress
+wp_hostname: "ACME_WordPress"
+wp_flavor: "c1-r05-d10"
+wp_sg: "SSHInt,HTTP"
+wp_zone: "Education"
+wp1_fixed_ip: 192.168.0.7
+wp2_fixed_ip: 192.168.0.8
+wp3_fixed_ip: 192.168.0.9
+
+#FileServer
+fs_hostname: "ACME_Fileserver"
+fs_flavor: "c1-r05-d10"
+fs_sg: "SSHInt,NFS"
+fs_zone: "Education"
+fs_path: "/src/www/wordpress"
+fs1_fixed_ip: 192.168.0.6
+
+#Backup server
+backup_hostname: "ACME_Backup"
+backup_flavor: "c1-r05-d10"
+backup_sg: "SSHInt"
+backup_zone: "Education"
+backup_fixed_ip: 192.168.0.14

@@ -1,0 +1,19 @@
+---
+- name: Get data from backup server
+  hosts: backup
+
+
+  tasks:
+    - name: Get WP dump from backup server
+      fetch:
+        src: /tmp/{{item}}_dump.sql
+        dest: host_backup/
+      with_list:
+      - wp1
+
+    - name: Get tarballed WP folder from backup server
+      fetch:
+        src: /tmp/{{item}}_folder_backup.tar.gz
+        dest: host_backup/
+      with_list:
+      - wp1

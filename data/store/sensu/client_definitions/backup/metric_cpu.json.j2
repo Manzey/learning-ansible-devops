@@ -1,0 +1,17 @@
+{
+  "checks": {
+    "metric_cpu": {
+      "CPU usage": "http://{{mon_public}}:{{grafana_ext_port}}/render/d-solo/RQFdf5q-321xik/backup?orgId=1&panelId=4&width=1000&height=500&tz=Europe%2FStockholm&uchiwa_force_display_as_image=.jpg",
+      "command": "/opt/sensu/embedded/bin/metrics-cpu-pcnt-usage.rb --scheme cpu.bak.:::name:::",
+      "handlers": [
+        "graphite_tcp"
+      ],
+      "interval": 5,
+      "standalone": true,
+      "subscribers": [
+        "backup"
+      ],
+      "type": "metric"
+    }
+  }
+}

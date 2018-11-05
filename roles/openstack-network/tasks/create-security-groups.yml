@@ -1,0 +1,158 @@
+---
+# Role - openstack-network - tasks- create-security-groups.yml
+- name: Create security group HTTP
+  os_security_group:
+    state: present
+    name: HTTP
+    description: Allows HTTP traffic to server
+
+- name: Create SG SSH External
+  os_security_group:
+    state: present
+    name: SSHExt
+    description: Allows external SSH traffic to server
+
+- name: Create SG SSH Internal
+  os_security_group:
+    state: present
+    name: SSHInt
+    description: Allows internal SSH traffic to server
+
+- name: Create SG VRRP-SEC-GRP
+  os_security_group:
+    state: present
+    name: vrrp-sec-grp
+    description: Security group for loadbalancers
+
+- name: Create SG Monitor
+  os_security_group:
+    state: present
+    name: Monitor
+    description: Allows Monitor traffic to server
+
+- name: Create SG NFS
+  os_security_group:
+    state: present
+    name: NFS
+    description: Allows NFS traffic to server
+
+- name: Create SG MYSQL
+  os_security_group:
+    state: present
+    name: MYSQL
+    description: Allows mysql traffic
+
+- name: Creating rules for SG HTTP
+  os_security_group_rule:
+    security_group: HTTP
+    protocol: tcp
+    port_range_min: 80
+    port_range_max: 80
+    remote_ip_prefix: 0.0.0.0/0
+
+- name: Create rule for SG SSHExt
+  os_security_group_rule:
+    security_group: SSHExt
+    protocol: tcp
+    port_range_min: 22
+    port_range_max: 22
+    remote_ip_prefix: 0.0.0.0/0
+
+- name: Create rule for SG SSHInt
+  os_security_group_rule:
+    security_group: SSHInt
+    protocol: tcp
+    port_range_min: 22
+    port_range_max: 22
+    remote_ip_prefix: "{{ subnet }}"
+
+- name: Create rule for VRRP
+  os_security_group_rule:
+    security_group: vrrp-sec-grp
+    protocol: 112
+
+- name: Create rule for ICMP
+  os_security_group_rule:
+    security_group: vrrp-sec-grp
+    protocol: icmp
+    remote_ip_prefix: 0.0.0.0/0
+
+- name: Create rule for SG Uchiwa
+  os_security_group_rule:
+    security_group: Monitor
+    protocol: tcp
+    port_range_min: 80
+    port_range_max: 80
+    remote_ip_prefix: 0.0.0.0/0
+
+- name: Create rule for SG Grafana
+  os_security_group_rule:
+    security_group: Monitor
+    protocol: tcp
+    port_range_min: 3000
+    port_range_max: 3000
+    remote_ip_prefix: 0.0.0.0/0
+
+- name: Create rule for sensu API
+  os_security_group_rule:
+    security_group: Monitor
+    protocol: tcp
+    port_range_min: "{{ sensu_api_port }}"
+    port_range_max: "{{ sensu_api_port }}"
+    remote_ip_prefix: "{{ subnet }}"
+
+- name: Create rule for Rabbit MQ
+  os_security_group_rule:
+    security_group: Monitor
+    protocol: tcp
+    port_range_min: "{{ rabbitmq_port }}"
+    port_range_max: "{{ rabbitmq_port }}"
+    remote_ip_prefix: "{{ subnet }}"
+
+- name: Create rule for Redis
+  os_security_group_rule:
+    security_group: Monitor
+    protocol: tcp
+    port_range_min: "{{ redis_port }}"
+    port_range_max: "{{ redis_port }}"
+    remote_ip_prefix: "{{ subnet }}"
+
+- name: Creating rules for SG NFS 111 TCP
+  os_security_group_rule:
+    security_group: NFS
+    protocol: tcp
+    port_range_min: 111
+    port_range_max: 111
+    remote_ip_prefix: "{{ subnet }}"
+
+- name: Creating rules for SG NFS 111 UDP
+  os_security_group_rule:
+    security_group: NFS
+    protocol: udp
+    port_range_min: 111
+    port_range_max: 111
+    remote_ip_prefix: "{{ subnet }}"
+
+- name: Creating rules for SG NFS 2049 TCP
+  os_security_group_rule:
+    security_group: NFS
+    protocol: tcp
+    port_range_min: 2049
+    port_range_max: 2049
+    remote_ip_prefix: "{{ subnet }}"
+
+- name: Creating rules for SG NFS 2049 UDP
+  os_security_group_rule:
+    security_group: NFS
+    protocol: udp
+    port_range_min: 2049
+    port_range_max: 2049
+    remote_ip_prefix: "{{ subnet }}"
+
+- name: Create rule for SG MYSQL
+  os_security_group_rule:
+    security_group: MYSQL
+    protocol: tcp
+    port_range_min: 3306
+    port_range_max: 3306
+    remote_ip_prefix: "{{ subnet }}"

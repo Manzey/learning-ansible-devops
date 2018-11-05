@@ -1,0 +1,13 @@
+{
+  "checks": {
+    "check_redis_running": {
+      "command": "check-process.rb -p redis",
+      "handlers": [
+        "default",
+        "slack"
+      ],
+      "interval": 60,
+      "standalone": true
+    }
+  }
+}

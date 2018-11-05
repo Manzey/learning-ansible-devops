@@ -1,0 +1,11 @@
+---
+  # Role - keepalived - tasks- install-keepalived_BUILD.yml  
+- name: Update and install build-essential
+  apt:
+    name: "{{item}}"
+    update_cache: yes
+  become: yes
+  notify:
+    - keepalived started
+  with_items:
+    - keepalived

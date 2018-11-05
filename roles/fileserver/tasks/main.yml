@@ -1,0 +1,4 @@
+---
+    # Role - fileserver - tasks - main.yml
+
+- include: install-fileserver.yml

@@ -1,0 +1,15 @@
+- name: Test database servers
+  hosts: database
+  become: true
+  gather_facts: false
+  tags:
+    - database
+
+  tasks:
+    - name: database_test_reachability
+      ping:
+
+    - name: database_test_MySQL_running
+      command: /bin/systemctl status mysql
+      register: res
+      failed_when: "'Active: active (running)' not in res.stdout"

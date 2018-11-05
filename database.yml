@@ -1,0 +1,8 @@
+---
+- name: Configure database
+  hosts: database
+  become: true
+  roles:
+    - common
+    - mysql
+    - sensu.sensu

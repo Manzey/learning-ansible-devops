@@ -1,0 +1,15 @@
+---
+# Role - php - tasks- install-php.yml    
+- name: Install php extensions for Xenial distribution
+  apt: name={{ item }} state=present
+  when: "ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'xenial'"
+  with_items:
+    - php7.0-gd
+    - php-ssh2
+
+- name: Install php extensions for Bionic distribution
+  apt: name={{ item }} state=present
+  when: "ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'bionic'"
+  with_items:
+    - php7.2-gd
+    - php-ssh2

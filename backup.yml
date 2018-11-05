@@ -1,0 +1,8 @@
+---
+- name: Backup
+  hosts: backup
+  become: yes
+  roles:
+    - common
+    - backup
+    - sensu.sensu

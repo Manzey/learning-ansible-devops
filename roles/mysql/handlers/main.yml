@@ -1,0 +1,11 @@
+---
+# Role - mysql - handlers - main.yml
+- name: mysql started
+  service:
+    name: mysql
+    state: started
+
+- name: restart mysql
+  service:
+    name: mysql
+    state: restarted

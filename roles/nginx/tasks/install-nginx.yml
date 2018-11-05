@@ -1,0 +1,8 @@
+---
+# Role - nginx - tasks- install-nginx.yml   
+- name: Update and install nginx
+  apt:
+    name: nginx
+    update_cache: yes
+  notify: nginx started
+  become: yes

@@ -1,0 +1,25 @@
+---
+# Role - openstack-network - tasks- create-network.yml  
+- name: Create network
+  os_network:
+    state: present
+    name: "{{networkname}}"
+
+- name: Create subnet
+  os_subnet:
+    state: present
+    network_name: "{{networkname}}"
+    name: "{{subnetName}}"
+    cidr: "{{subnet}}"
+    dns_nameservers:
+      - "{{DNS1}}"
+      - "{{DNS2}}"
+
+- name: Create router
+  ignore_errors: yes
+  os_router:
+    state: present
+    name: "{{router}}"
+    network: public
+    interfaces:
+      - "{{subnetName}}"

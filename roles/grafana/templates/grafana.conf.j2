@@ -1,0 +1,5 @@
+<VirtualHost *:80>
+  ServerName monitor.acme.com
+  ProxyPass / http://127.0.0.1:3001/
+  ProxyPassReverse / http://127.0.0.1:3001/
+</VirtualHost>

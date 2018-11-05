@@ -1,0 +1,7 @@
+- name: Create/update instances
+  hosts: localhost
+  gather_facts: false
+  remote_user: root
+
+  roles:
+    - openstack-instances

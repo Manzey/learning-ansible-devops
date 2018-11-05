@@ -1,0 +1,17 @@
+{
+  "checks": {
+    "metric_disk": {
+      "Disk usage": "http://{{mon_public}}:{{grafana_ext_port}}/render/d-solo/23QF5q-321xik/wordpress?orgId=1&panelId=6&width=1000&height=500&tz=Europe%2FStockholm&uchiwa_force_display_as_image=.jpg",
+      "command": "/opt/sensu/embedded/bin/metrics-disk-capacity.rb --scheme disk.wp.:::name:::",
+      "handlers": [
+        "graphite_tcp"
+      ],
+      "interval": 5,
+      "standalone": true,
+      "subscribers": [
+        "wordpress"
+      ],
+      "type": "metric"
+    }
+  }
+}

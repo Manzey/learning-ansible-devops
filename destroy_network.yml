@@ -1,0 +1,70 @@
+---
+- name: Destroy
+  hosts: localhost
+  remote_user: root
+  tasks:
+    - name: Remove fixed ips
+      os_port:
+        state: absent
+        name: "{{ item.name }}"
+      with_items: "{{ fixed_ip }}"
+
+    - name: Remove VIP
+      os_port:
+        state: absent
+        name: "VIP"
+
+    - name: Remove security group HTTP
+      os_security_group:
+        state: absent
+        name: HTTP
+
+    - name: Remove security group SSH External
+      os_security_group:
+        state: absent
+        name: SSHExt
+
+    - name: Remove security group SSH Internal
+      os_security_group:
+        state: absent
+        name: SSHInt
+
+    - name: Remove security group VRRP
+      os_security_group:
+        state: absent
+        name: vrrp-sec-grp
+
+    - name: Remove security group NFS
+      os_security_group:
+        state: absent
+        name: NFS
+
+    - name: Remove security group MYSQL
+      os_security_group:
+        state: absent
+        name: MYSQL
+
+    - name: Remove security group MYSQL
+      os_security_group:
+        state: absent
+        name: Uchiwa
+
+    - name: Remove security group Monitor
+      os_security_group:
+         state: absent
+         name: Monitor
+
+    - name: Remove Router
+      os_router:
+       state: absent
+       name: "{{router}}"
+
+    - name: Remove subnet
+      os_subnet:
+       state: absent
+       name: "{{subnetName}}"
+
+    - name: Remove network
+      os_network:
+       state: absent
+       name: "{{networkname}}"

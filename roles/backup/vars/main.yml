@@ -1,0 +1,2 @@
+WP_DUMP_LOCATION: /tmp/wp_dump.sql
+WP_FOLDER_BACKUP_LOCATION: /tmp/wp_folder_backup.tar.gz

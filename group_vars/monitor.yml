@@ -1,0 +1,22 @@
+---
+# group_vars - monitory.yml
+sensu_include_dashboard: true
+sensu_deploy_rabbitmq_server: true
+sensu_deploy_redis_server: true
+rabbitmq_enable_ssl: false
+uchiwa_dc_name: "ACME-Servers"
+redis_server: true
+rabbitmq_server: true
+sensu_master: true
+sensu_remote_plugins:
+  - cpu-checks
+  - disk-checks
+  - memory-checks
+  - process-checks
+  - sensu-plugins-slack
+  - sensu-plugins-uchiwa
+  - sensu-plugins-graphite
+grafana_http_port: 4500
+grafana_external_enabled: false
+grafana_nginx_port: 80
+sensu_config_path_checks: "{{ dynamic_data_store }}/sensu/client_definitions/monitor/"

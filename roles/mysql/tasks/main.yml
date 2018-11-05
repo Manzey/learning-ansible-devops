@@ -1,0 +1,4 @@
+---
+# Role - mysql - tasks - main.yml
+- include_vars: db-vault.yml
+- include: install-mysql.yml

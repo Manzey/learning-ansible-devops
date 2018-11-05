@@ -1,0 +1,18 @@
+{
+  "checks": {
+    "check_cpu_linux": {
+      "CPU usage": "http://{{mon_public}}:{{grafana_ext_port}}/render/d-solo/RQF51232ask/fileservers?orgId=1&panelId=4&width=1000&height=500&tz=Europe%2FStockholm&uchiwa_force_display_as_image=.jpg",
+      "command": "/opt/sensu/embedded/bin/check-cpu.rb -w 80 -c 90 ",
+      "handlers": [
+        "default",
+        "slack"
+      ],
+      "interval": 60,
+      "refresh": 60,
+      "standalone": true,
+      "subscribers": [
+        "fileserver"
+      ]
+    }
+  }
+}

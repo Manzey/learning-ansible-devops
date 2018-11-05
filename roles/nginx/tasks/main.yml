@@ -1,0 +1,4 @@
+---
+# Role - nginx - tasks- main.yml
+- include: install-nginx.yml
+- include: loadbalancer.yml

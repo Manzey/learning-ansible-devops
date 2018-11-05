@@ -1,0 +1,18 @@
+{
+  "checks": {
+    "check_memory": {
+      "Memory usage": "http://{{mon_public}}:{{grafana_ext_port}}/render/d-solo/RQFdf5q-321xik/backup?orgId=1&panelId=5&width=1000&height=500&tz=Europe%2FStockholm&uchiwa_force_display_as_image=.jpg",
+      "command": "/opt/sensu/embedded/bin/check-memory-percent.rb -w 80 -c 95",
+      "handlers": [
+        "default",
+        "slack"
+      ],
+      "interval": 60,
+      "refresh": 60,
+      "standalone": true,
+      "subscribers": [
+        "backup"
+      ]
+    }
+  }
+}

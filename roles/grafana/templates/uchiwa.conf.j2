@@ -1,0 +1,5 @@
+<VirtualHost *:80>
+  ServerName monitor.acme.com
+  ProxyPass / http://127.0.0.1:{{grafana_ext_port}}/
+  ProxyPassReverse / http://127.0.0.1:{{grafana_ext_port}}/
+</VirtualHost>

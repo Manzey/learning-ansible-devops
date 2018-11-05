@@ -1,0 +1,19 @@
+---
+# Role - wordpress - tasks - cron-backup-wp-folder.yml     
+- name: Create cron job to tarball the wordpress directory to "{{ WP_FOLDER_BACKUP_LOCATION }}".
+  cron:
+    name: "WP folder tarball"
+    minute: 0
+    hour: "0-23"
+    job: "tar -cpzf {{ WP_FOLDER_BACKUP_LOCATION }} /var/www/wordpress"
+  tags:
+    - backup
+
+- name: Create cron job to take a dump of WP database to "{{ WP_DUMP_LOCATION }}"
+  cron:
+    name: "WP db dump"
+    minute: 10
+    hour: "0-23"
+    job: "mysqldump -h {{ db1_fixed_ip }} -u {{ db_user }} --password={{ db_password }} {{ db_databaseName }} > {{ WP_DUMP_LOCATION }}"
+  tags:
+    - backup

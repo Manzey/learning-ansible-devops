@@ -1,0 +1,13 @@
+{
+  "checks": {
+    "check_mysql_running": {
+      "command": "check-process.rb -p mysql",
+      "handlers": [
+        "default",
+        "slack"
+      ],
+      "interval": 60,
+      "standalone": true
+    }
+  }
+}

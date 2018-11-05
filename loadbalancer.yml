@@ -1,0 +1,25 @@
+---
+
+- name: Provision the Load Balancers
+  hosts: loadbalancer
+  become: yes
+
+  roles:
+    - common
+    - sensu.sensu
+
+- name: Install keepalived and nginx on lb1 (master)
+  hosts: ACME_lb1
+  become: yes
+
+  roles:
+    - { role: nginx, header: "PRIMARY" }
+    - { role: keepalived, keepalived_role: "MASTER"}
+
+- name: Install keepalived and nginx on lb2 (backup)
+  hosts: ACME_lb2
+  become: yes
+
+  roles:
+    - { role: nginx, header: "SECONDARY" }
+    - { role: keepalived, keepalived_role: "BACKUP"}

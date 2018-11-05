@@ -1,0 +1,39 @@
+---
+    # Role - keepalived - tasks- install-keepalived.yml  
+- name: Update and install keepalived
+  apt:
+    name: "{{item}}"
+    update_cache: yes
+  become: yes
+  with_items:
+    - keepalived
+
+- name: Bind address
+  sysctl:
+    name: net.ipv4.ip_nonlocal_bind
+    value: "1"
+    state: present
+    reload: yes
+
+- name: Copy the check_nginx script
+  template:
+    src: check_nginx.sh.j2
+    dest: /etc/keepalived/check_nginx.sh
+    mode: 0755
+    owner: root
+    group: root
+  tags: keepalived
+  notify: restart keepalived
+
+- name: Configure keepalived
+  template: src=keepalived.conf.j2 dest=/etc/keepalived/keepalived.conf
+  tags: keepalived
+  notify: restart keepalived
+
+- name: Start keepalived
+  service: name=keepalived state=started
+  tags: always
+
+- name: Restart keepalived always
+  service: name=keepalived state=restarted
+  tags: always

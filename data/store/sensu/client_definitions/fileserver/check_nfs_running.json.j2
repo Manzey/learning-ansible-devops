@@ -1,0 +1,13 @@
+{
+  "checks": {
+    "check_nfs-kernel-server": {
+      "command": "check-process.rb -p nfs",
+      "handlers": [
+        "default",
+        "slack"
+      ],
+      "interval": 60,
+      "standalone": true
+    }
+  }
+}

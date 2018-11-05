@@ -1,0 +1,7 @@
+---
+  # Role - common - tasks - main.yml
+- name: Update apt cache
+  apt:
+   update_cache: yes
+- name: Install security updates
+  raw: apt-get -s dist-upgrade | grep "^Inst" | grep -i securi | awk -F " " {'print $2'} | xargs apt-get install

@@ -1,0 +1,33 @@
+{
+  "graphite_event": {
+    "server_uri": "http://localhost:80/events/",
+    "tags": [
+      "custom_tag_a",
+      "custom_tag_b"
+    ]
+  },
+  "handlers": {
+    "default": {
+      "handlers": [
+        "graphite_event"
+      ],
+      "type": "set"
+    },
+    "graphite_event": {
+      "command": "/op/sensus/embedded/bin/handler-graphite-event.rb",
+      "filters": [
+        "custom_filter_a",
+        "custom_filter_b"
+      ],
+      "type": "pipe"
+    },
+    "graphite_tcp": {
+      "mutator": "only_check_output",
+      "socket": {
+        "host": "localhost",
+        "port": 2003
+      },
+      "type": "tcp"
+    }
+  }
+}

@@ -1,0 +1,6 @@
+---
+  # Role - keepalived - handlers - main.yml
+- name: restart keepalived
+  service:
+    name: keepalived
+    state: restarted

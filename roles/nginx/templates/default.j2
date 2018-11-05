@@ -1,0 +1,22 @@
+upstream wp {
+   ip_hash; # user will always be directed to same server, to ensure session persistence.
+   least_conn;
+   {% for host in groups['wordpress'] %}
+   server {{ host }}:80;
+   {% endfor %}
+}
+
+  server {
+    listen 80;
+    server_name acme.com;
+    proxy_set_header Host $http_host;
+    location / {
+      proxy_pass http://wp;
+    }
+    location /nginx_status {
+  stub_status on;
+  access_log   off;
+  allow 127.0.0.1;
+  deny all;
+}
+  }

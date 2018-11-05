@@ -1,0 +1,23 @@
+---
+    # Role - fileserver - tasks - install-fileserver.yml
+- name: Create python link
+  raw: test -e /usr/bin/python || ln -s /usr/bin/python3.5 /usr/bin/python
+- name: Create directory
+  file:
+    path: "{{fs_path}}"
+    state: directory
+- name: Install NFS
+  apt:
+    name: nfs-kernel-server
+    update_cache: yes
+- name: Create shares
+  template:
+    src: ../templates/exports.j2
+    dest: /etc/exports
+- name: Export shares
+  raw: exportfs
+
+- name: restart fileserver
+  service:
+    name: nfs-kernel-server
+    state: restarted

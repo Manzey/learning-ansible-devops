@@ -1,0 +1,16 @@
+---
+- name: Install Apache, WP & PHP
+  hosts: wordpress
+  become: true
+  roles:
+    - common
+    - apache
+    - php
+    - wordpress
+    - sensu.sensu
+
+- name: Import DB on wp1
+  hosts: ACME_wp1
+  become: true
+  roles:
+    - wordpress-db

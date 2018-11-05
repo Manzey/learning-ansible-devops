@@ -1,0 +1,30 @@
+---
+# Role - backup - tasks - install-cronjob.yml
+- name: Copy the ssh file
+  copy:
+    src: "{{ key_location }}"
+    dest: /home/ubuntu/.ssh/id_rsa.pem
+
+- name: Create cron job to copy wp db dump
+  cron:
+    user: ubuntu
+    name: "WP db dump ip {{ item }}"
+    minute: 20
+    hour: "0-23"
+    job: rsync -Pav -e "ssh -i $HOME/.ssh/id_rsa.pem -o StrictHostKeyChecking=no" ubuntu@{{item.ip}}:/tmp/wp_dump.sql /tmp/{{item.name}}_dump.sql >> /tmp/{{item.name}}_dump.log
+
+  with_list:
+    - name: wp1
+      ip: "{{ wp1_fixed_ip }}"
+      
+- name: Create cron job to copy wp folder tarball
+  cron:
+    user: ubuntu
+    name: "WP folder backup {{ item }}"
+    minute: 30
+    hour: "0-23"
+    job: rsync -Pav -e "ssh -i $HOME/.ssh/id_rsa.pem -o StrictHostKeyChecking=no" ubuntu@{{item.ip}}:{{ WP_FOLDER_BACKUP_LOCATION }} /tmp/{{item.name}}_folder_backup.tar.gz >> /tmp/{{item.name}}_folder_backup.log
+
+  with_list:
+    - name: wp1
+      ip: "{{ wp1_fixed_ip }}"

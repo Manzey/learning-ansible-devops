@@ -1,0 +1,25 @@
+---
+# Role - apache - tasks - install-apache.yml
+
+- name: "Install packages"
+  apt:
+    name: "{{ item }}"
+  with_items:
+    - apache2
+    - nfs-common
+
+- name: Install required software for Xenial distribution
+  apt: name={{ item }} state=present
+  when: "ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'xenial'"
+  with_items:
+    - php7.0-mysql
+    - php7.0
+    - libapache2-mod-php7.0
+
+- name: Install required software for Bionic distribution
+  apt: name={{ item }} state=present
+  when: "ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'bionic'"
+  with_items:
+    - php7.2-mysql
+    - php7.2
+    - libapache2-mod-php7.2

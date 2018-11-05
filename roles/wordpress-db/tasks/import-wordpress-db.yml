@@ -1,0 +1,33 @@
+---
+# Role - wordpress-db - tasks - install-wordpress-db.yml  
+- name: Install WP CLI
+  raw: curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+
+- name: Set permissions
+  raw: chmod +x wp-cli.phar
+
+- name: Move wp-cli
+  raw: mv wp-cli.phar /usr/local/bin/wp
+
+- name: Extract WP Uploads to shared folder
+  unarchive: src=/tmp/acme_wordpress_files.tar.gz dest=/var/www/wordpress copy=no exclude=wp-config.php
+  ignore_errors: yes
+
+- name: Import db
+  raw: cd /var/www/wordpress && wp db import /tmp/backup.sql --allow-root
+
+- name: Update home
+  raw: cd /var/www/wordpress && wp option update home http://"{{ lb_public }}" --allow-root
+
+- name: Update siteurl
+  raw: cd /var/www/wordpress && wp option update siteurl http://"{{ lb_public }}" --allow-root
+
+- name: Update link structure
+  raw: cd /var/www/wordpress && wp option update permalink_structure '/index.php/%year%/%monthnum%/%day%/%postname%/' --allow-root
+
+- name: Replace all example domain names with actual (Executing query)
+  raw: cd /var/www/wordpress && wp db query "UPDATE wp_posts SET post_content = REPLACE(post_content, 'http://acme.example.org', 'http://"{{ lb_public }}"')" --allow-root
+
+- name: Replace all example domain names with actual 2 (Executing query)
+  raw: cd /var/www/wordpress && wp db query "UPDATE wp_posts SET guid = REPLACE(guid, 'http://acme.example.org', 'http://"{{ lb_public }}"')" --allow-root
+  notify: restart apache

@@ -1,0 +1,4 @@
+---
+# Role - wordpress - tasks - main.yml
+
+- include: import-wordpress-db.yml

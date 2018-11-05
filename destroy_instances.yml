@@ -1,0 +1,72 @@
+---
+- name: Destroy
+  hosts: localhost
+  remote_user: root
+  tasks:
+    - name: Kill Database instance
+      os_server:
+        state: absent
+        name: "ACME_db1"
+      tags:
+        - ACME_db1
+
+    - name: Kill Jump server instance
+      os_server:
+        state: absent
+        name: "ACME_JumpServer"
+      tags:
+        - ACME_JumpServer
+
+    - name: Kill WP1 instance
+      os_server:
+        state: absent
+        name: "ACME_wp1"
+      tags:
+        - ACME_wp1
+
+    - name: Kill WP2 instance
+      os_server:
+        state: absent
+        name: "ACME_wp2"
+      tags:
+        - ACME_wp2
+
+    - name: Kill WP3 instance
+      os_server:
+        state: absent
+        name: "ACME_wp3"
+      tags:
+        - ACME_wp3
+
+    - name: Kill Monitor instance
+      os_server:
+        state: absent
+        name: "ACME_monitor"
+      tags:
+        - ACME_monitor
+
+    - name: Kill Fileserver instance
+      os_server:
+       state: absent
+       name: "ACME_fs1"
+      tags:
+        - ACME_fs1
+
+    - name: Kill LB1 instance
+      os_server:
+        state: absent
+        name: "ACME_lb1"
+      tags:
+        - ACME_lb1
+
+    - name: Kill LB2 instance
+      os_server:
+        state: absent
+        name: "ACME_lb2"
+      tags:
+        - ACME_lb2
+
+    - name: Kill backup instance
+      os_server:
+        state: absent
+        name: "ACME_backup"

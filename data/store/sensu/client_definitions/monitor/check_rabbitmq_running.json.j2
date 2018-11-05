@@ -1,0 +1,13 @@
+{
+  "checks": {
+    "check_rabbitmq_running": {
+      "command": "check-process.rb -p rabbitmq",
+      "handlers": [
+        "default",
+        "slack"
+      ],
+      "interval": 60,
+      "standalone": true
+    }
+  }
+}

@@ -1,0 +1,36 @@
+---
+# Role - openstack-instance - tasks- create-instance.yml   
+- name: Create jump server
+  os_server:
+    name: "{{js_hostname}}"
+    state: present
+    image: "{{ubuntu_image}}"
+    flavor: "{{js_flavor}}"
+    key_name: "{{keyname}}"
+    security_groups: "{{js_sg}}"
+    availability_zone: "{{js_zone}}"
+    wait: yes
+    auto_ip: yes
+    nics:
+      - port-name: jumpserver
+  register: "jump"
+
+- name: Create servers
+  os_server:
+    name: "{{ prefix }}_{{ item.name }}"
+    state: present
+    image: "{{ item.image }}"
+    flavor: "{{ item.flavor }}"
+    key_name: "{{ item.key }}"
+    security_groups: "{{ item.security_groups }}"
+    availability_zone: "{{ item.availability_zone }}"
+    auto_ip: "{{ item.auto_ip }}"
+    wait: "{{ item.wait }}"
+    nics: "port-name={{ item.name }}"
+  with_items: "{{ servers }}"
+  register: "instances"
+
+
+- name: Wait for SSH
+  wait_for_connection:
+    delay: 25

@@ -1,0 +1,7 @@
+---
+# Role - wordpress - tasks - main.yml
+- include_vars: db-vault.yml
+
+- include: install-mysqlclient.yml
+- include: install-wordpress.yml
+- include: cron-backup-wp-folder.yml

@@ -1,0 +1,3 @@
+---
+# Role - openstack-instance - tasks- main.yml  
+- include: create-instance.yml

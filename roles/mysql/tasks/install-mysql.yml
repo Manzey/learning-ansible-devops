@@ -1,0 +1,38 @@
+---
+# Role - mysql - tasks - install-mysql.yml
+- name: Update and install mysql
+  apt:
+    name:
+      - mysql-server
+      - python3-mysqldb
+    update_cache: yes
+
+- name: Update configuration
+  template:
+    src: ../templates/my.cnf.j2
+    dest: /etc/mysql/my.cnf
+
+- name: Create mysql user
+  mysql_user:
+    name: "{{db_user}}"
+    password: "{{db_password}}"
+    host: "%"
+    priv: "*.*:ALL"
+    state: present
+
+- name: "Create database"
+  mysql_db:
+   name: "{{db_databaseName}}"
+   state: present
+
+- name: Copy config file #needed for remote access
+  template: src=mysqld.cnf dest=/etc/mysql/mysql.conf.d/mysqld.cnf
+
+- name: Restart mysql
+  service:
+    name: mysql
+    state: restarted
+- name: running?
+  service:
+    name: mysql
+    state: started

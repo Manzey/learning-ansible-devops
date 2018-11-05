@@ -1,0 +1,8 @@
+---
+- name: Configure monitor
+  hosts: monitor
+  become: true
+  roles:
+  -  common
+  -  sensu.sensu
+  -  grafana

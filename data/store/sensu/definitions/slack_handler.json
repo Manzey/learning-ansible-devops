@@ -1,0 +1,21 @@
+{
+  "handlers": {
+    "slack": {
+      "command": "handler-slack.rb",
+      "severites": [
+        "critical",
+        "unknown",
+        "warning",
+        "ok"
+      ],
+      "type": "pipe"
+    }
+  },
+  "slack": {
+    "channel": "#acme_monitoring",
+    "dashboard": "http://{{mon_public}}/#/client/ACME-Servers/",
+    "template": "",
+    "username": "monitoring",
+    "webhook_url": "{{slack_webhook}}"
+  }
+}

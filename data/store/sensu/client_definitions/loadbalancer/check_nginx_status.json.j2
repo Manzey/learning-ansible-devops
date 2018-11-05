@@ -1,0 +1,15 @@
+{
+  "checks": {
+    "check_nginx_status": {
+      "Nginx Connections": "http://{{mon_public}}:{{grafana_ext_port}}/render/d-solo/RsdfQF5q-xik/loadbalancers?orgId=1&panelId=2&width=1000&height=500&tz=Europe%2FStockholm&uchiwa_force_display_as_image=.jpg",
+      "Nginx requests": "http://{{mon_public}}:{{grafana_ext_port}}/render/d-solo/RsdfQF5q-xik/loadbalancers?orgId=1&panelId=3&width=1000&height=500&tz=Europe%2FStockholm&uchiwa_force_display_as_image=.jpg",
+      "command": "check-nginx-status.rb -u http://127.0.0.1/nginx_status",
+      "handlers": [
+        "default",
+        "slack"
+      ],
+      "interval": 60,
+      "standalone": true
+    }
+  }
+}

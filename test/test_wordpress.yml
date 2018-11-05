@@ -1,0 +1,23 @@
+---
+- name: Test wordpress servers
+  hosts: wordpress
+  become: true
+  gather_facts: false
+  tags:
+    - wordpress
+
+  tasks:
+    - name: wordpress_test_reachability
+      ping:
+
+    - name: wordpress_test_Apache_running
+      command: /bin/systemctl status apache2
+      register: res
+      failed_when: "'Active: active (running)' not in res.stdout"
+
+    - name: "wordpress_assert_ACME_in_wp.content_on_{{ inventory_hostname }}"
+      uri:
+        url: "http://{{ inventory_hostname }}"
+        return_content: yes
+      register: wp
+      failed_when: "'ACME' not in wp.content"

@@ -1,0 +1,8 @@
+---
+- name: Create network
+  hosts: localhost
+  gather_facts: false
+  remote_user: root
+
+  roles:
+    - openstack-network

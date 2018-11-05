@@ -1,0 +1,27 @@
+- name: Test database servers
+  hosts: loadbalancer
+  become: true
+  gather_facts: false
+  tags:
+    - loadbalancer
+
+  tasks:
+    - name: loadbalancer_test_reachability
+      ping:
+
+    - name: loadbalancer_test_nginx_running
+      command: /bin/systemctl status nginx
+      register: res
+      failed_when: "'Active: active (running)' not in res.stdout"
+
+    - name: loadbalancer_test_keepalived_running
+      command: /bin/systemctl status keepalived
+      register: res
+      failed_when: "'Active: active (running)' not in res.stdout"
+
+    - name: "loadbalancer_test_{{lb_public}}_accessable publicly"
+      uri:
+        url: "http://{{ lb_public }}"
+        return_content: yes
+      register: lb
+      failed_when: "'ACME' not in lb.content"

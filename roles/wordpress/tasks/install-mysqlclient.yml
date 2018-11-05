@@ -1,0 +1,8 @@
+---
+# Role - wordpress - tasks - install-mysqlclient.yml    
+- name: "Install MYSQL client core"
+  apt:
+    name: "{{ item }}"
+    update_cache: yes
+  with_items:
+    - mysql-client-core-5.7

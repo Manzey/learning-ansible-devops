@@ -1,0 +1,5 @@
+---
+# Role - openstack-network - tasks- main.yml
+- include: create-network.yml
+- include: create-security-groups.yml
+- include: create-fixed-ip.yml

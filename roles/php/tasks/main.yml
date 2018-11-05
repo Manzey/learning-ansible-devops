@@ -1,0 +1,4 @@
+---
+# Role - php - tasks - main.yml
+
+- include: install-php.yml

@@ -1,0 +1,13 @@
+{
+  "checks": {
+    "check_mysql_connections": {
+      "command": "check-mysql-connections.rb --host=localhost --port=3306 --user={{db_user}} --pass={{db_password}} --socket=/var/run/mysqld/mysqld.sock",
+      "handlers": [
+        "default",
+        "slack"
+      ],
+      "interval": 60,
+      "standalone": true
+    }
+  }
+}

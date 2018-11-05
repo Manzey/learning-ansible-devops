@@ -1,0 +1,5 @@
+---
+# Role - grafana - tasks - main.yml
+- include_vars: monitoring-vault.yml
+- include: install-grafana.yml
+- include: configure-grafana.yml

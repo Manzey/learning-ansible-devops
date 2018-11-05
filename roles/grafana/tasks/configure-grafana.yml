@@ -1,0 +1,57 @@
+---
+# Role - grafana - tasks - configure-grafana.yml
+- name: Ensure proviosning dir
+  file:
+    path: /etc/grafana/provisioning
+    state: directory
+    mode: 0755
+- name: Ensure datasource dir
+  file:
+    path: /etc/grafana/provisioning/datasources
+    state: directory
+    mode: 0755
+
+- name: Add datasource to grafana
+  template:
+    src: datasource.yml.j2
+    dest: /etc/grafana/provisioning/datasources/datasource.yaml
+
+- name: Ensure dashboard dir
+  file:
+    path: /etc/grafana/provisioning/dashboards
+    state: directory
+    mode: 0755
+- name: Ensure dashboard dir 2
+  file:
+    path: /etc/grafana/provisioning/dashboards/active
+    state: directory
+    mode: 0755
+- name: Add dashboard config to grafana
+  template:
+    src: dashboard.yml.j2
+    dest: /etc/grafana/provisioning/dashboards/dashboards.yaml
+- name: Add backup dashboard to grafana
+  template:
+    src: bakdash.json.j2
+    dest: /etc/grafana/provisioning/dashboards/active/bakdash.json
+- name: Add database dashboard to grafana
+  template:
+    src: dbdash.json.j2
+    dest: /etc/grafana/provisioning/dashboards/active/dbdash.json
+- name: Add fileserver dashboard to grafana
+  template:
+    src: fsdash.json.j2
+    dest: /etc/grafana/provisioning/dashboards/active/fsdash.json
+- name: Add monitor dashboard to grafana
+  template:
+    src: mondash.json.j2
+    dest: /etc/grafana/provisioning/dashboards/active/mondash.json
+- name: Add wordpress dashboard to grafana
+  template:
+    src: wpdash.json.j2
+    dest: /etc/grafana/provisioning/dashboards/active/wpdash.json
+- name: Add loadbalancer dashboard to grafana
+  template:
+    src: lbdash.json.j2
+    dest: /etc/grafana/provisioning/dashboards/active/lbdash.json
+  notify: grafana restarted

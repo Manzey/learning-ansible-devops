@@ -1,0 +1,90 @@
+- name: Test wordpress servers
+  hosts: ACME_wp1
+  become: true
+  gather_facts: false
+  vars_files:
+    - ../vars/db-vault.yml
+  tags:
+    - wordpress
+
+  tasks:
+    - name: wp1_install_python3-mysqldb
+      apt:
+        name: python3-mysqldb
+        state: present
+
+    - name: wp1_create_database_'test_db'
+      mysql_db:
+        login_host: "{{ db1_fixed_ip }}"
+        login_user: "{{db_user}}"
+        login_password: "{{ db_password }}"
+        name: test_db
+        state: present
+
+    - name: wp1_copy_dump_/tmp/test.sql
+      copy:
+        src: ../data/test/wp1_dump.sql
+        dest: /tmp/test.sql
+
+    - name: wp1_import_/tmp/test.sql
+      mysql_db:
+        login_host: "{{ db1_fixed_ip }}"
+        login_user: "{{db_user}}"
+        login_password: "{{ db_password }}"
+        state: import
+        target: /tmp/test.sql
+        name: test_db
+
+    - name: "wp1: Fails if user 'acme' is not in table wp_users"
+      command: >
+        mysql --user={{db_user}} --password={{db_password}} test_db
+        --host={{db1_fixed_ip}} --batch --skip-column-names --execute="SELECT user_nicename from wp_users"
+      register: res
+      failed_when: "'acme' not in res.stdout_lines"
+
+    - name: "wp1: Fails if post name blanditiis-explicabo-ipsa-quis' is not returned"
+      command: >
+        mysql --user={{db_user}} --password={{db_password}} test_db
+        --host={{db1_fixed_ip}} --batch --skip-column-names --execute="SELECT post_name from wp_posts WHERE post_title='Blanditiis explicabo ipsa quis'"
+      register: res
+      failed_when: "'blanditiis-explicabo-ipsa-quis' not in res.stdout_lines"
+
+    - name: "wp1: Should be able to create a table 'test'"
+      command: >
+        mysql --user={{db_user}} --password={{db_password}} test_db
+        --host={{db1_fixed_ip}} --batch --skip-column-names
+        --execute="CREATE TABLE IF NOT EXISTS test (id INT, data VARCHAR(100))"
+      register: res
+
+    - name: "wp1: Should be able to insert into 'test' table"
+      command: >
+        mysql --user={{db_user}} --password={{db_password}} test_db
+        --host={{db1_fixed_ip}} --batch --skip-column-names
+        --execute="INSERT INTO test (id, data) VALUES (1, 'Hello!')"
+      register: res
+
+    - name: "wp1: Should be able to select from table 'test'"
+      command: >
+        mysql --user={{db_user}} --password={{db_password}} test_db
+        --host={{db1_fixed_ip}} --batch --skip-column-names
+        --execute="SELECT data from test WHERE id = 1"
+      register: res
+      failed_when: "'Hello!' not in res.stdout_lines"
+
+    - name: wp1_remove_database_'test_db'
+      mysql_db:
+        login_host: "{{ db1_fixed_ip }}"
+        login_user: "{{db_user}}"
+        login_password: "{{ db_password }}"
+        name: test_db
+        state: absent
+
+    - name: wp1_remove_python3-mysqldb
+      apt:
+        name: python3-mysqldb
+        state: absent
+
+    - name: wp1_remove_/tmp/test.sql
+      file:
+        path: /tmp/test.sql
+        state: absent

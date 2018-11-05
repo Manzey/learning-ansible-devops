@@ -1,0 +1,18 @@
+{
+  "checks": {
+    "check_disk_usage": {
+      "Disk usage": "http://{{mon_public}}:{{grafana_ext_port}}/render/d-solo/RQFasd5q-321xik/monitoring?orgId=1&panelId=6&width=1000&height=500&tz=Europe%2FStockholm&uchiwa_force_display_as_image=.jpg",
+      "command": "/opt/sensu/embedded/bin/check-disk-usage.rb -w 80 -c 90",
+      "handlers": [
+        "default",
+        "slack"
+      ],
+      "interval": 60,
+      "refresh": 60,
+      "standalone": false,
+      "subscribers": [
+        "monitor"
+      ]
+    }
+  }
+}

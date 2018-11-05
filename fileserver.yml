@@ -1,0 +1,8 @@
+---
+- name: Configure fileserver
+  hosts: fileserver
+  become: true
+  roles:
+    - common
+    - fileserver
+    - sensu.sensu

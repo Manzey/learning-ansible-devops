@@ -1,0 +1,18 @@
+{
+  "checks": {
+    "metric_nginx": {
+      "Nginx Connections": "http://{{mon_public}}:{{grafana_ext_port}}/render/d-solo/RsdfQF5q-xik/loadbalancers?orgId=1&panelId=2&width=1000&height=500&tz=Europe%2FStockholm&uchiwa_force_display_as_image=.jpg",
+      "Nginx requests": "http://{{mon_public}}:{{grafana_ext_port}}/render/d-solo/RsdfQF5q-xik/loadbalancers?orgId=1&panelId=3&width=1000&height=500&tz=Europe%2FStockholm&uchiwa_force_display_as_image=.jpg",
+      "command": "/opt/sensu/embedded/bin/metrics-nginx.rb --scheme nginx.:::name:::",
+      "handlers": [
+        "graphite_tcp"
+      ],
+      "interval": 5,
+      "standalone": true,
+      "subscribers": [
+        "loadbalancer"
+      ],
+      "type": "metric"
+    }
+  }
+}

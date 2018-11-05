@@ -1,0 +1,22 @@
+---
+  # Role - grafana - handlers - main.yml
+- name: carbon-cache started
+  service: name=carbon-cache state=started
+
+- name: apache2 reloaded
+  service: name=apache2 state=reloaded
+
+- name: restart rabbit
+  service: name=rabbitmq-server state=restarted
+
+- name: elasticsearch started
+  service: name=elasticsearch state=started
+
+- name: grafana started
+  service: name=grafana-server state=started
+
+- name: grafana restarted
+  service: name=grafana-server state=restarted
+
+- name: apache2 restarted
+  service: name=apache2 state=restarted

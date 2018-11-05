@@ -1,0 +1,11 @@
+---
+sensu_remote_plugins:
+  - cpu-checks
+  - disk-checks
+  - memory-checks
+  - process-checks
+  - sensu-plugins-apache
+
+sensu_config_path_checks: "{{ dynamic_data_store }}/sensu/client_definitions/wordpress/"
+wordpress_url: https://wordpress.org/wordpress-4.6.12.tar.gz
+wordpress_backup: https://github.com/2dv514/syllabus/blob/master/examination/part_2/acme_wordpress_files_and_data.tar.gz?raw=true

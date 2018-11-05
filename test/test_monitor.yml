@@ -1,0 +1,60 @@
+---
+- name: Test monitor servers
+  hosts: monitor
+  become: true
+  gather_facts: false
+  tags:
+    - monitor
+
+  tasks:
+    - name: monitor_test_reachability
+      ping:
+
+    - name: monitor_test_rabbitmq_running
+      command: /bin/systemctl status rabbitmq-server
+      register: res
+      failed_when: "'Active: active (running)' not in res.stdout"
+
+    - name: monitor_test_redis_running
+      command: /bin/systemctl status redis
+      register: res
+      failed_when: "'Active: active (running)' not in res.stdout"
+
+    - name: monitor_test_uchiwa_active(exited)
+      command: service uchiwa status
+      register: res
+      failed_when: "'Active: active (exited)' not in res.stdout"
+
+    - name: monitor_test_sensu-server_running
+      command: /bin/systemctl status sensu-server
+      register: res
+      failed_when: "'Active: active (running)' not in res.stdout"
+
+    - name: monitor_test_sensu-api_running
+      command: /bin/systemctl status sensu-api
+      register: res
+      failed_when: "'Active: active (running)' not in res.stdout"
+
+    - name: monitor_test_sensu-client_running
+      command: /bin/systemctl status sensu-client
+      register: res
+      failed_when: "'Active: active (running)' not in res.stdout"
+
+    - name: monitor_test_apache_running
+      command: /bin/systemctl status apache2
+      register: res
+      failed_when: "'Active: active (running)' not in res.stdout"
+
+    - name: "monitor_test_Uchiwa_in_lb.content_on_{{ mon_public }}"
+      uri:
+        url: "http://{{ mon_public }}"
+        return_content: yes
+      register: lb
+      failed_when: "'Uchiwa' not in lb.content"
+
+    - name: "monitor_test_Grafana_in_lb.content_on_{{ mon_public }}:3000"
+      uri:
+        url: "http://{{ mon_public }}:3000"
+        return_content: yes
+      register: lb
+      failed_when: "'Grafana' not in lb.content"

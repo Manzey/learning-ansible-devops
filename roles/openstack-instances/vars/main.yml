@@ -1,0 +1,109 @@
+prefix: ACME
+servers:
+  - name: lb1
+    image: "{{ubuntu_image}}"
+    flavor: "{{lb_flavor}}"
+    key: "{{keyname}}"
+    security_groups: "{{lb_sg}}"
+    availability_zone: "{{lb_zone}}"
+    wait: yes
+    auto_ip: no
+    meta:
+      group: loadbalancers, production
+      fixed_ip: "{{ lb1_fixed_ip }}"
+
+  - name: lb2
+    image: "{{ubuntu_image_1804}}"
+    flavor: "{{lb_flavor}}"
+    key: "{{keyname}}"
+    security_groups: "{{lb_sg}}"
+    availability_zone: "{{lb_zone}}"
+    wait: yes
+    auto_ip: no
+    meta:
+      group: loadbalancers, production
+      fixed_ip: "{{ lb2_fixed_ip }}"
+
+  - name: wp1
+    image: "{{ubuntu_image}}"
+    flavor: "{{wp_flavor}}"
+    key: "{{keyname}}"
+    security_groups: "{{wp_sg}}"
+    availability_zone: "{{wp_zone}}"
+    wait: yes
+    auto_ip: no
+    meta:
+      group: wordpress, production
+      fixed_ip: "{{ wp1_fixed_ip }}"
+
+  - name: wp2
+    image: "{{ubuntu_image_1804}}"
+    flavor: "{{wp_flavor}}"
+    key: "{{keyname}}"
+    security_groups: "{{wp_sg}}"
+    availability_zone: "{{wp_zone}}"
+    wait: yes
+    auto_ip: no
+    meta:
+      group: wordpress, production
+      fixed_ip: "{{ wp2_fixed_ip }}"
+
+  - name: wp3
+    image: "{{ubuntu_image}}"
+    flavor: "{{wp_flavor}}"
+    key: "{{keyname}}"
+    security_groups: "{{wp_sg}}"
+    availability_zone: "{{wp_zone}}"
+    wait: yes
+    auto_ip: no
+    meta:
+      group: wordpress, production
+      fixed_ip: "{{ wp3_fixed_ip }}"
+
+  - name: db1
+    image: "{{ubuntu_image}}"
+    flavor: "{{db_flavor}}"
+    key: "{{keyname}}"
+    security_groups: "{{db_sg}}"
+    availability_zone: "{{db_zone}}"
+    wait: yes
+    auto_ip: no
+    meta:
+      group: database, production
+      fixed_ip: "{{ db1_fixed_ip }}"
+
+  - name: fs1
+    image: "{{ubuntu_image}}"
+    flavor: "{{fs_flavor}}"
+    key: "{{keyname}}"
+    security_groups: "{{fs_sg}}"
+    availability_zone: "{{fs_zone}}"
+    wait: yes
+    auto_ip: no
+    meta:
+      group: fileserver, production
+      fixed_ip: "{{ fs1_fixed_ip }}"
+
+  - name: monitor
+    image: "{{ubuntu_image}}"
+    flavor: "{{mon_flavor}}"
+    key: "{{keyname}}"
+    security_groups: "{{mon_sg}}"
+    availability_zone: "{{mon_zone}}"
+    wait: yes
+    auto_ip: no
+    meta:
+      group: monitor, production
+      fixed_ip: "{{ mon_fixed_ip }}"
+
+  - name: backup
+    image: "{{ubuntu_image}}"
+    flavor: "{{backup_flavor}}"
+    key: "{{keyname}}"
+    security_groups: "{{backup_sg}}"
+    availability_zone: "{{backup_zone}}"
+    wait: yes
+    auto_ip: no 
+    meta:
+      group: backup, production
+      fixed_ip: "{{ backup_fixed_ip }}"

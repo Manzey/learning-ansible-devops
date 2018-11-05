@@ -1,0 +1,25 @@
+---
+- name: Create network and create instances
+  hosts: localhost
+  gather_facts: false
+  remote_user: root
+
+  roles:
+    - openstack-network
+    - openstack-instances
+
+- name: Provision the instances
+  hosts: all
+  gather_facts: false
+  remote_user: root
+
+# Provision the instances
+- import_playbook: monitor.yml
+- import_playbook: database.yml
+- import_playbook: fileserver.yml
+- import_playbook: wordpress.yml
+- import_playbook: loadbalancer.yml
+- import_playbook: backup.yml
+
+# Run tests
+- import_playbook: test/main.yml

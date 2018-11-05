@@ -1,0 +1,13 @@
+{
+  "checks": {
+    "check_uchiwa_running": {
+      "command": "check-process.rb -p uchiwa",
+      "handlers": [
+        "default",
+        "slack"
+      ],
+      "interval": 60,
+      "standalone": true
+    }
+  }
+}

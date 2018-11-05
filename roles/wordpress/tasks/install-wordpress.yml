@@ -1,0 +1,43 @@
+---
+# Role - wordpress - tasks - install-wordpress.yml      
+- name: Download WordPress
+  get_url:
+    url="{{ wordpress_url }}"
+   dest=/tmp/wordpress.tar.gz
+
+- name: Get Data
+  get_url:
+    url="{{ wordpress_backup }}"
+    dest=/tmp/wp_data.tar.gz
+
+- name: Extract WordPress
+  unarchive: src=/tmp/wordpress.tar.gz dest=/var/www/ copy=no
+
+- name: Extract Data
+  unarchive: src=/tmp/wp_data.tar.gz dest=/tmp/ copy=no
+
+- name: Extract WP Data
+  unarchive: src=/tmp/acme_wordpress_files.tar.gz dest=/var/www/wordpress copy=no
+  ignore_errors: yes
+
+- name: Update default Apache site
+  lineinfile:
+    dest=/etc/apache2/sites-enabled/000-default.conf
+    regexp="(.)+DocumentRoot /var/www/html"
+    line="DocumentRoot /var/www/wordpress"
+  notify:
+    - restart apache
+
+- name: Copy WordPress config file
+  template: src=wp-config.php dest=/var/www/wordpress/
+
+- name: Use fileserver shared folder
+  raw: "mount {{fs1_fixed_ip}}:{{fs_path}} /var/www/wordpress/wp-content/uploads"
+  ignore_errors: yes
+
+- name: Wait for mount before setting permission
+  wait_for_connection:
+    delay: 10
+
+- name: Permissions for folder
+  raw: chown -R www-data:www-data /var/www/wordpress/wp-content/uploads

@@ -1,0 +1,76 @@
+---
+  # Role - grafana - tasks - install-grafana.yml
+- name: Add grafana repo
+  apt_repository:
+    repo: deb https://packagecloud.io/grafana/stable/debian/ stretch main
+    state: present
+
+- name: Update and install graphite
+  apt:
+    name:
+      - graphite-carbon
+      - graphite-web
+      - apache2
+      - python-pip
+      - libapache2-mod-wsgi
+    update_cache: yes
+    state: present
+
+- name: Change retention rates
+  lineinfile:
+    path: "/etc/default/graphite-carbon"
+    regexp: "^CARBON_CACHE_ENABLED"
+    line: "CARBON_CACHE_ENABLED=true"
+  notify: carbon-cache started
+
+- name: Set timezone graphite
+  lineinfile:
+    path: "/etc/graphite/local_settings.py"
+    regexp: "^TIME_ZONE="
+    line: "TIME_ZONE='Europe/Stockholm'"
+- name: Set secrect key graphite
+  lineinfile:
+    path: "/etc/graphite/local_settings.py"
+    regexp: "^SECRET_KEY="
+    line: "SECRET_KEY='a_long_salted_key_should_be_used_here!'"
+
+- name: Prep database
+  raw: sudo -u _graphite graphite-manage migrate --noinput
+
+- name: Copy apache template
+  template: src=apache2-graphite.conf.j2 dest=/etc/apache2/sites-available/graphite.conf
+
+- name: Remove default apche2 site
+  raw: a2dissite 000-default
+
+- name: Add graphite site
+  raw: a2ensite graphite
+  notify: apache2 reloaded
+
+- name: Increase rabbit files
+  raw: ulimit -n 65536
+  notify: restart rabbit
+
+- name: Install grafana
+  apt:
+    name:
+      - grafana
+    allow_unauthenticated: yes
+  notify: grafana started
+
+- name: Install Grafana on apache
+  template: src=grafana.conf.j2 dest=/etc/apache2/sites-available/grafana.conf
+
+- name: Enable add proxy for apache
+  raw: a2enmod proxy proxy_http
+
+- name: Add grafana site
+  raw: a2ensite grafana
+  notify: apache2 restarted
+
+- name: Install Uchiwa on apache
+  template: src=uchiwa.conf.j2 dest=/etc/apache2/sites-available/uchiwa.conf
+
+- name: Enable Uchiwa site
+  raw: a2ensite uchiwa
+  notify: apache2 reloaded

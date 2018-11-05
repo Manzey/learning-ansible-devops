@@ -1,0 +1,7 @@
+keepalived_auth_pass: "1111" # shared secret?
+keepalived_router_id: "51" #"08c402af-dcc0-4cf8-9c2d-7cca08278cfa" #"52" could be random?
+keepalived_shared_iface: "ens3" # used for our ubuntu instances
+keepalived_shared_ip: "{{ lb_vip }}"
+keepalived_check_process: "keepalived"
+keepalived_priority: "150"
+keepalived_backup_priority: "100"

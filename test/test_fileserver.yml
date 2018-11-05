@@ -1,0 +1,25 @@
+- name: Test fileserver
+  hosts: fileserver
+  become: true
+  gather_facts: false
+  tags:
+    - fileserver
+
+  tasks:
+    - name: fileserver_test_reachability
+      ping:
+
+    - name: fileserver_test_nfs-kernel-server_active(exited)
+      command: /bin/systemctl status nfs-kernel-server
+      register: res
+      failed_when: "'Active: active (exited)' not in res.stdout"
+
+    - name: fileserver_get_/etc/exports
+      stat:
+        path: /etc/exports
+      register: p
+
+    - name: fileserver_assert_exists_/etc/exports
+      assert:
+        that:
+          - p.stat.exists

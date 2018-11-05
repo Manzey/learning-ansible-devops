@@ -1,0 +1,19 @@
+---
+
+- name: Test suite
+  hosts: all
+  gather_facts: false
+  remote_user: root
+  vars_files:
+    - ../vars/db-vault.yml
+
+- import_playbook: test_jumpserver.yml
+- import_playbook: test_loadbalancer.yml
+- import_playbook: test_wordpress.yml
+- import_playbook: test_database.yml
+- import_playbook: test_monitor.yml
+- import_playbook: test_fileserver.yml
+- import_playbook: test_backup.yml
+
+# Test that can select from db, be sure to pass in --vault-password-file <file> or --ask-vault-pass
+- import_playbook: test_wp1_conn_DB.yml
